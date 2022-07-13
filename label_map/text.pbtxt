@@ -1,0 +1,13 @@
+{
+    "labels":[
+        "id",
+        "name",
+        "birthday",
+        "sex",
+        "nation",
+        "hometown",
+        "addr",
+        "exp"
+    ]
+  }
+  
