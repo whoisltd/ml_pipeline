@@ -20,7 +20,7 @@ targetSize = { 'w': imageSize, 'h': imageSize }
 @app.route('/api/v1/ocr', methods=['POST'])
 def postdata():
     data = json.loads(request.data)
-    print(data)
+    data = data['url']
     image = url_to_image(data)
     image = np.array(image)
 
@@ -37,6 +37,7 @@ def postdata():
     test = ocr(seq2seq_url)
 
     data = test.OCR(corner_img, textt)
+    
     return jsonify(data)
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True)

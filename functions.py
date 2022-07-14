@@ -4,7 +4,7 @@ import json
 import urllib
 
 def url_to_image(url):
-    resp = urllib.urlopen(url)
+    resp = urllib.request.urlopen(url)
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     return image
@@ -13,7 +13,7 @@ def get_center_point(coordinate_dict):
     points = dict()
     for key in coordinate_dict.keys():
         xmin, ymin, xmax, ymax = coordinate_dict[key][0]
-        x_center = (xmin + xmax) / 2 - 15
+        x_center = (xmin + xmax) / 2
         y_center = (ymin + ymax) / 2
         points[key] = (x_center, y_center)
     return points
