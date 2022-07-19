@@ -1,7 +1,6 @@
 from vietocr.tool.predictor import Predictor
 from vietocr.tool.config import Cfg
 from PIL import Image
-import cv2
 
 class ocr:
     def __init__(self, url_model):

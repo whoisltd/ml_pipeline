@@ -1,5 +1,5 @@
 import requests
-from functions import *
+from ocr.functions import process_output
 
 def text(img, url_model, threshold, targetSize):
     payload = {'instances': [img.tolist()]}

@@ -1,14 +1,14 @@
 import json
-from PIL import Image, ImageOps
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 import numpy as np
 
-from corner import corner
-from functions import url_to_image
-from text import text
-from ocr import ocr
+# from corner import corner
+# from functions import url_to_image
+# from text import text
+# from ocr import extract_infos
 
-app = Flask(__name__)
+from ocr import app, corner, extract_infos, text
+from ocr.functions import url_to_image
 
 THRESHOLD = 0.3
 imageSize = 512
@@ -16,7 +16,7 @@ corner_url = 'http://localhost:8501/v1/models/corner:predict'
 text_url = 'http://localhost:8501/v1/models/text:predict'
 seq2seq_url = 'vietocr/seq2seqocr.pth'
 targetSize = { 'w': imageSize, 'h': imageSize }
-    
+   
 @app.route('/api/v1/ocr', methods=['POST'])
 def postdata():
     data = json.loads(request.data)
@@ -34,10 +34,8 @@ def postdata():
 
     textt = text(corner_img, text_url, THRESHOLD, targetSize)
 
-    test = ocr(seq2seq_url)
+    test = extract_infos(seq2seq_url)
 
     data = test.OCR(corner_img, textt)
     
     return jsonify(data)
-if __name__ == "__main__":
-    app.run(debug=True, use_reloader=True)
