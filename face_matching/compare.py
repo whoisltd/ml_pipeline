@@ -1,3 +1,4 @@
+import math
 import cv2
 import numpy as np
 from face_matching.box_utils import url_to_image
@@ -43,12 +44,10 @@ def img_to_encoding(image, facenet_url):
     # img_pixels *= 255
     img_pixels = np.float64(img_pixels) / 127.5
     img_pixels -= 1
-    print(img_pixels.shape)
     
     payload = {'instances': img_pixels.tolist()}
     res = requests.post(facenet_url, json=payload)
     # embedding = model.predict(img_pixels)[0].tolist()
-    print(res)
     embedding = res.json()['predictions']
     # resized = cv2.resize(image, (160, 160))
     # Swap channel dimensions
@@ -74,3 +73,13 @@ def findEuclideanDistance(source_representation, test_representation):
 
 def l2_normalize(x):
     return x / np.sqrt(np.sum(np.multiply(x, x)))
+
+def distance_to_confident(face_distance, threshold):
+    if face_distance > threshold:
+        range = (1.64 - threshold)
+        linear_val = (1.64 - face_distance) / (range * 2)
+        return linear_val
+    else:
+        range = threshold
+        linear_val = 1 - (face_distance / (range * 2))
+        return linear_val + ((1 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2))
