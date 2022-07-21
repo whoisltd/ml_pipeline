@@ -1,7 +1,7 @@
 from time import time
 from flask import jsonify, request, json
 import numpy as np
-from pipeline.face_matching.compare import findEuclideanDistance, img_to_encoding, l2_normalize, get_embedding
+from pipeline.face_matching.compare import findEuclideanDistance, img_to_encoding, l2_normalize, get_embedding, distance_to_confident
 from pipeline.face_matching.mtcnn import MTCNN
 from pipeline.face_matching import app
 import tensorflow as tf
@@ -39,6 +39,7 @@ def api_face_matching():
     # Calculate distance
     dist = findEuclideanDistance(l2_normalize(embedding_one), l2_normalize(embedding_two))
 
+    confident = distance_to_confident(dist, 1.05)
     # dist = np.linalg.norm(embedding_one - embedding_two)
     print(f'Distance between two images is {dist}')
     if dist > 1.05:
@@ -46,10 +47,10 @@ def api_face_matching():
     else:
         print('These images are of the same person!')
     
-    return jsonify({'distance': dist})
+    return jsonify({'distance': dist, 'confident': confident})
 
 if __name__ == '__main__':
-    postdata(
+    api_face_matching(
     'https://funflow-sp.sgp1.digitaloceanspaces.com/upload/blob_1f04290d-e3a9-4fbd-be2b-6cc3dee40e06',
     'https://funflow-sp.sgp1.digitaloceanspaces.com/upload/blob_1f04290d-e3a9-4fbd-be2b-6cc3dee40e06')
 
