@@ -1,6 +1,6 @@
 import requests
 import tensorflow as tf
-from face_matching.box_utils import calibrate_box, convert_to_square, get_image_boxes, generate_bboxes, preprocess
+from pipeline.face_matching.box_utils import calibrate_box, convert_to_square, get_image_boxes, generate_bboxes, preprocess
 tf.config.experimental_run_functions_eagerly(True)
 
 DEF_THRESHOLDS = [0.6, 0.7, 0.7]

@@ -6,9 +6,9 @@ import numpy as np
 # from functions import url_to_image
 # from text import text
 # from ocr import extract_infos
-
-from ocr import app, corner, extract_infos, text
-from ocr.functions import url_to_image
+from pipeline import app
+from pipeline.ocr import corner, extract_infos, text
+from pipeline.ocr.functions import url_to_image
 
 THRESHOLD = 0.3
 imageSize = 512
@@ -18,7 +18,7 @@ seq2seq_url = 'vietocr/seq2seqocr.pth'
 targetSize = { 'w': imageSize, 'h': imageSize }
    
 @app.route('/api/v1/ocr', methods=['POST'])
-def postdata():
+def api_ocr():
     data = json.loads(request.data)
     data = data['url']
     image = url_to_image(data)

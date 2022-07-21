@@ -1,8 +1,9 @@
+from time import time
 from flask import jsonify, request, json
 import numpy as np
-from face_matching.compare import findEuclideanDistance, img_to_encoding, l2_normalize, get_embedding
-from face_matching.mtcnn import MTCNN
-from face_matching import app
+from pipeline.face_matching.compare import findEuclideanDistance, img_to_encoding, l2_normalize, get_embedding
+from pipeline.face_matching.mtcnn import MTCNN
+from pipeline.face_matching import app
 import tensorflow as tf
 tf.config.experimental_run_functions_eagerly(True)
 
@@ -11,19 +12,23 @@ rnet_url = 'http://localhost:8501/v1/models/r_net/versions/1:predict'
 onet_url = 'http://localhost:8501/v1/models/o_net:predict'
 facenet_url = 'http://localhost:8501/v1/models/face_net:predict'
 @app.route('/api/v1/face_matching', methods=['POST'])
-def postdata():
+def api_face_matching():
     data = json.loads(request.data)
     url_image1 = data['url_image1']
     url_image2 = data['url_image2']
-    pnet_url = data['url_pnet']
-    rnet_url = data['url_rnet']
-    onet_url = data['url_onet']
-    facenet_url = data['url_facenet']
+    # Time to load images
+    
+    pnet_url = data['pnet_url']
+    rnet_url = data['rnet_url']
+    onet_url = data['onet_url']
+    facenet_url = data['facenet_url']
 
+    start = time()
     mtcnn = MTCNN(pnet_url, rnet_url, onet_url)
     face1 = get_embedding(url_image1, mtcnn)
     face2 = get_embedding(url_image2, mtcnn)
-
+    end = time()
+    print('Time to load models: ', end - start)
 
     embedding_one = img_to_encoding(face1, facenet_url)
     embedding_two = img_to_encoding(face2, facenet_url)

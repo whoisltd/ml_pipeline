@@ -1,7 +1,7 @@
 import math
 import cv2
 import numpy as np
-from face_matching.box_utils import url_to_image
+from pipeline.face_matching.box_utils import url_to_image
 import requests
 import tensorflow as tf
 

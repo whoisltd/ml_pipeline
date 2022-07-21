@@ -1,6 +1,6 @@
 import requests
 import numpy as np
-from ocr.functions import align_image, process_output 
+from pipeline.ocr.functions import align_image, process_output 
 
 def corner(img, url_model, threshold, targetSize):
     payload = {'instances': [img.tolist()]}
